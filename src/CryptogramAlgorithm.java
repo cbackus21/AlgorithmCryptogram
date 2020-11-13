@@ -1,21 +1,25 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class CryptogramAlgorithm {
-	private String[] inputString;
-	private String inputWord1;
-	private String inputWord2;
+	private int numDecodings = 0;
 	private Trie currentTrie;
+	private ArrayList<String> inputString;
 	private ArrayList<String> currentCandidates;
+	private Map<String, String> results;
+	private SimpleCipher cipher;
 	
 	public CryptogramAlgorithm(String s) {
-		inputString = s.split(" ");
-		inputWord1 = inputString[0];
-		inputWord2 = inputString[1];
+		inputString = new ArrayList<String>(s.split(" "));
+		Collections.sort()
 		this.currentTrie = new Trie();
+		
 		this.currentCandidates = new ArrayList<String>();
+		this.results = new HashMap<String, String>();
 		
 	}
 	
@@ -36,7 +40,26 @@ public class CryptogramAlgorithm {
 		}
 	}
 	
-	public void makeCypher()
-	
-	
+	public void testValues() {
+		for (String testWord : currentCandidates) {
+			try {
+				cipher = new SimpleCipher();
+				cipher.setCipher(inputWord1, testWord);
+				if (currentTrie.containsNode(cipher.decode(inputWord2))) {
+					results.put(cipher.decode(inputWord1),cipher.decode(inputWord2));
+					numDecodings++;
+				}
+			}
+			catch (ValueAlreadyMappedException e) {
+				continue;
+			}		
+	    }
+	}
+		
+	public void printResults() {
+		System.out.println(numDecodings);
+		for (Map.Entry<String, String> entry : results.entrySet()) {
+			System.out.println(entry.getKey() + " " + entry.getValue());
+		}
+	}
 }
