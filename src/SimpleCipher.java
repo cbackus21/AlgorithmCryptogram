@@ -1,3 +1,4 @@
+import java.util.Comparator;
 import java.util.HashMap;
 
 public class SimpleCipher {
@@ -11,48 +12,37 @@ public class SimpleCipher {
 		}
 	}
 	
-	public void setCipher(String inputWord, String testWord) throws ValueAlreadyMappedException, KeyAlreadyMappedException {
+	private HashMap<Character, Character> getCipher() {
+		return this.cipher;
+	}
+	
+	public boolean setCipher(String inputWord, String testWord) {
 		char[] input = inputWord.toCharArray();
 		char[] test = testWord.toCharArray();
-		char[] valuesMapped = new char[26]; 
+		char[] valuesMapped = new char[26];
+		HashMap<Character, Character> valuesMappedTo = new HashMap<Character, Character>();
 		char[] keysMapped = new char[inputWord.length()];
 		for (int i = 0; i < inputWord.length(); i++) {
-			/*
-			for (char c: valuesMapped) {
-				if (test[i] == c && input[i) {
-					throw new ValueAlreadyMappedException();
-				}
+			if (input[i] == ' ') {
+				continue;
 			}
-			*/
+			for (char c: valuesMapped) {
+			    if (test[i] == c && input[i] != valuesMappedTo.get(c)) {
+			        return false;
+			    }
+			}
 			for (char d: keysMapped) {
 				if (input[i] == d && test[i] != cipher.get(d)) {
-					throw new KeyAlreadyMappedException();
+					return false;
 				}
 			}
 			cipher.put(input[i], test[i]);
 			keysMapped[i] = input[i];
 			valuesMapped[i] = test[i];
+			valuesMappedTo.put(test[i], input[i]);
 		}
-	}
-	
-	public String decode(String s) {
-		char[] chars = s.toCharArray();
-		for (int i = 0; i < s.length(); i++) {
-			chars[i] = cipher.get(chars[i]);
-		}
-		s = String.valueOf(chars);
-		return s;
+		return true;
 	}
 }
 
-class ValueAlreadyMappedException extends RuntimeException {
-	public ValueAlreadyMappedException() {
-		super();
-	}
-}
 
-class KeyAlreadyMappedException extends RuntimeException {
-	public KeyAlreadyMappedException() {
-		super();
-	}
-}
